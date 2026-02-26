@@ -206,6 +206,30 @@ func TestParseBgpAnnotations(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "prefix with regex meta chars",
+			args: args{
+				node: &corev1.Node{
+					ObjectMeta: metav1.ObjectMeta{
+						Annotations: map[string]string{
+							"(*.?/bgp/node-asn": "65000",
+							"(*.?/bgp/peer-asn": "64000",
+							"(*.?/bgp/src-ip":   "10.0.0.254",
+						}},
+				},
+				prefix: "(*.?/bgp",
+			},
+			wantConfig: kubevip.BGPConfig{
+				AS:                65000,
+				RouterID:          "10.0.0.254",
+				SourceIP:          "10.0.0.254",
+				Peers:             []kubevip.BGPPeer{},
+			},
+			wantPeerConfig: kubevip.BGPPeer{
+				AS: 64000,
+			},
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {

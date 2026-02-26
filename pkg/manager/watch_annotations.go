@@ -142,6 +142,8 @@ func (sm *Manager) annotationsWatcher(ctx context.Context) error {
 func parseBgpAnnotations(bgpConfig kubevip.BGPConfig, node *v1.Node, prefix string) (kubevip.BGPConfig, kubevip.BGPPeer, error) {
 	bgpPeer := kubevip.BGPPeer{}
 
+	prefix = regexp.QuoteMeta(prefix)
+
 	nodeASN := ""
 	for k, v := range node.Annotations {
 		regex := regexp.MustCompile(fmt.Sprintf("^%s/(bgp-peers-0-)?node-asn", prefix))
