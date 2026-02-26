@@ -73,11 +73,12 @@ func TestParseBgpAnnotations(t *testing.T) {
 				node: &corev1.Node{
 					ObjectMeta: metav1.ObjectMeta{
 						Annotations: map[string]string{
-							"bgp/node-asn": "65000",
-							"bgp/peer-asn": "64000",
-							"bgp/src-ip":   "10.0.0.254",
-							"bgp/peer-ip":  "10.0.0.1",
-							"bgp/bgp-pass": "cGFzc3dvcmQ=", // base64 encoded.
+							"bgp/node-asn":  "65000",
+							"bgp/peer-asn":  "64000",
+							"bgp/src-ip":    "10.0.0.254",
+							"bgp/peer-ip":   "10.0.0.1",
+							"bgp/bgp-pass":  "cGFzc3dvcmQ=", // base64 encoded.
+							"bgp/multi-hop": "true",
 						}},
 				},
 				prefix: "bgp",
@@ -91,6 +92,7 @@ func TestParseBgpAnnotations(t *testing.T) {
 						AS:       64000,
 						Address:  "10.0.0.1",
 						Password: "password",
+						MultiHop: true,
 					},
 				},
 			},
@@ -98,6 +100,7 @@ func TestParseBgpAnnotations(t *testing.T) {
 				AS:       64000,
 				Address:  "10.0.0.1",
 				Password: "password",
+				MultiHop: true,
 			},
 			wantErr: false,
 		},
@@ -107,11 +110,12 @@ func TestParseBgpAnnotations(t *testing.T) {
 				node: &corev1.Node{
 					ObjectMeta: metav1.ObjectMeta{
 						Annotations: map[string]string{
-							"bgp/node-asn": "65000",
-							"bgp/peer-asn": "64000",
-							"bgp/src-ip":   "10.0.0.254",
-							"bgp/peer-ip":  "10.0.0.1,10.0.0.2,10.0.0.3",
-							"bgp/bgp-pass": "cGFzc3dvcmQ=", // base64 encoded.
+							"bgp/node-asn":  "65000",
+							"bgp/peer-asn":  "64000",
+							"bgp/src-ip":    "10.0.0.254",
+							"bgp/peer-ip":   "10.0.0.1,10.0.0.2,10.0.0.3",
+							"bgp/bgp-pass":  "cGFzc3dvcmQ=", // base64 encoded.
+							"bgp/multi-hop": "true",
 						}},
 				},
 				prefix: "bgp",
@@ -125,16 +129,19 @@ func TestParseBgpAnnotations(t *testing.T) {
 						AS:       64000,
 						Address:  "10.0.0.1",
 						Password: "password",
+						MultiHop: true,
 					},
 					{
 						AS:       64000,
 						Address:  "10.0.0.2",
 						Password: "password",
+						MultiHop: true,
 					},
 					{
 						AS:       64000,
 						Address:  "10.0.0.3",
 						Password: "password",
+						MultiHop: true,
 					},
 				},
 			},
@@ -142,6 +149,7 @@ func TestParseBgpAnnotations(t *testing.T) {
 				AS:       64000,
 				Address:  "10.0.0.3",
 				Password: "password",
+				MultiHop: true,
 			},
 			wantErr: false,
 		},
@@ -151,11 +159,12 @@ func TestParseBgpAnnotations(t *testing.T) {
 				node: &corev1.Node{
 					ObjectMeta: metav1.ObjectMeta{
 						Annotations: map[string]string{
-							"bgp/bgp-peers-0-node-asn": "65000",
-							"bgp/bgp-peers-0-peer-asn": "64000",
-							"bgp/bgp-peers-0-peer-ip":  "10.0.0.1,10.0.0.2,10.0.0.3",
-							"bgp/bgp-peers-0-src-ip":   "10.0.0.254",
-							"bgp/bgp-peers-0-bgp-pass": "cGFzc3dvcmQ=", // base64 encoded.
+							"bgp/bgp-peers-0-node-asn":  "65000",
+							"bgp/bgp-peers-0-peer-asn":  "64000",
+							"bgp/bgp-peers-0-peer-ip":   "10.0.0.1,10.0.0.2,10.0.0.3",
+							"bgp/bgp-peers-0-src-ip":    "10.0.0.254",
+							"bgp/bgp-peers-0-bgp-pass":  "cGFzc3dvcmQ=", // base64 encoded.
+							"bgp/bgp-peers-0-multi-hop": "true",
 						}},
 				},
 				prefix: "bgp",
@@ -169,16 +178,19 @@ func TestParseBgpAnnotations(t *testing.T) {
 						AS:       64000,
 						Address:  "10.0.0.1",
 						Password: "password",
+						MultiHop: true,
 					},
 					{
 						AS:       64000,
 						Address:  "10.0.0.2",
 						Password: "password",
+						MultiHop: true,
 					},
 					{
 						AS:       64000,
 						Address:  "10.0.0.3",
 						Password: "password",
+						MultiHop: true,
 					},
 				},
 			},
@@ -186,6 +198,7 @@ func TestParseBgpAnnotations(t *testing.T) {
 				AS:       64000,
 				Address:  "10.0.0.3",
 				Password: "password",
+				MultiHop: true,
 			},
 			wantErr: false,
 		},
