@@ -31,30 +31,6 @@ func TestParseBgpAnnotations(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "minimum required annotations",
-			args: args{
-				node: &corev1.Node{
-					ObjectMeta: metav1.ObjectMeta{
-						Annotations: map[string]string{
-							"bgp/node-asn": "65000",
-							"bgp/peer-asn": "64000",
-							"bgp/src-ip":   "10.0.0.254",
-						}},
-				},
-				prefix: "bgp",
-			},
-			wantConfig: kubevip.BGPConfig{
-				AS:       65000,
-				RouterID: "10.0.0.254",
-				SourceIP: "10.0.0.254",
-				Peers: []kubevip.BGPPeer{},
-			},
-			wantPeerConfig: kubevip.BGPPeer{
-				AS: 64000,
-			},
-			wantErr: false,
-		},
-		{
 			name: "base config not overwritten",
 			args: args{
 				node: &corev1.Node{
@@ -63,6 +39,7 @@ func TestParseBgpAnnotations(t *testing.T) {
 							"bgp/node-asn": "65000",
 							"bgp/peer-asn": "64000",
 							"bgp/src-ip":   "10.0.0.254",
+							"bgp/peer-ip":  "10.0.0.1",
 						}},
 				},
 				prefix: "bgp",
@@ -77,10 +54,16 @@ func TestParseBgpAnnotations(t *testing.T) {
 				SourceIP:          "10.0.0.254",
 				HoldTime:          15,
 				KeepaliveInterval: 5,
-				Peers:             []kubevip.BGPPeer{},
+				Peers: []kubevip.BGPPeer{
+					{
+						AS:      64000,
+						Address: "10.0.0.1",
+					},
+				},
 			},
 			wantPeerConfig: kubevip.BGPPeer{
-				AS: 64000,
+				AS:      64000,
+				Address: "10.0.0.1",
 			},
 			wantErr: false,
 		},
@@ -215,18 +198,23 @@ func TestParseBgpAnnotations(t *testing.T) {
 							"(*.?/bgp/node-asn": "65000",
 							"(*.?/bgp/peer-asn": "64000",
 							"(*.?/bgp/src-ip":   "10.0.0.254",
+							"(*.?/bgp/peer-ip":  "10.0.0.1",
 						}},
 				},
 				prefix: "(*.?/bgp",
 			},
 			wantConfig: kubevip.BGPConfig{
-				AS:                65000,
-				RouterID:          "10.0.0.254",
-				SourceIP:          "10.0.0.254",
-				Peers:             []kubevip.BGPPeer{},
+				AS:       65000,
+				RouterID: "10.0.0.254",
+				SourceIP: "10.0.0.254",
+				Peers: []kubevip.BGPPeer{{
+					AS:      64000,
+					Address: "10.0.0.1",
+				}},
 			},
 			wantPeerConfig: kubevip.BGPPeer{
-				AS: 64000,
+				AS:      64000,
+				Address: "10.0.0.1",
 			},
 			wantErr: false,
 		},
