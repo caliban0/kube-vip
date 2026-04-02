@@ -149,7 +149,7 @@ func parseBgpAnnotations(bgpConfig kubevip.BGPConfig, node *v1.Node, prefix stri
 	nodeASN := ""
 	regex := regexp.MustCompile(fmt.Sprintf("^%s/(bgp-peers-0-)?node-asn$", prefix))
 	for k, v := range node.Annotations {
-		if regex.Match([]byte(k)) {
+		if regex.MatchString(k) {
 			nodeASN = v
 		}
 	}
@@ -167,7 +167,7 @@ func parseBgpAnnotations(bgpConfig kubevip.BGPConfig, node *v1.Node, prefix stri
 	srcIP := ""
 	regex = regexp.MustCompile(fmt.Sprintf("^%s/(bgp-peers-0-)?src-ip$", prefix))
 	for k, v := range node.Annotations {
-		if regex.Match([]byte(k)) {
+		if regex.MatchString(k) {
 			srcIP = v
 		}
 	}
@@ -182,7 +182,7 @@ func parseBgpAnnotations(bgpConfig kubevip.BGPConfig, node *v1.Node, prefix stri
 	peerASN := ""
 	regex = regexp.MustCompile(fmt.Sprintf("^%s/(bgp-peers-0-)?peer-asn$", prefix))
 	for k, v := range node.Annotations {
-		if regex.Match([]byte(k)) {
+		if regex.MatchString(k) {
 			peerASN = v
 		}
 	}
@@ -200,7 +200,7 @@ func parseBgpAnnotations(bgpConfig kubevip.BGPConfig, node *v1.Node, prefix stri
 	peerIPString := ""
 	regex = regexp.MustCompile(fmt.Sprintf("^%s/(bgp-peers-[0-9]+-)?peer-ip$", prefix))
 	for k, v := range node.Annotations {
-		if regex.Match([]byte(k)) {
+		if regex.MatchString(k) {
 			peerIPString += v + ","
 		}
 	}
@@ -221,7 +221,7 @@ func parseBgpAnnotations(bgpConfig kubevip.BGPConfig, node *v1.Node, prefix stri
 			// Check if we're also expecting a password for this peer
 			base64BGPPassword := ""
 			for k, v := range node.Annotations {
-				if regexPass.Match([]byte(k)) {
+				if regexPass.MatchString(k) {
 					base64BGPPassword = v
 				}
 			}
